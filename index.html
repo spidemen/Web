@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Marker Clustering</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 70%;
+        width:90%;
+        left:5%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" style="width:500px; margin: 0 auto" align='center'left='50%' top='50%'>
+    <div id="header" style="background-color:yellow;">
+    <h1 style="margin-bottom:0;">Patient check system</h1> </div> 
+    </div>
+    <div id="content" style="background-color:#EEEEE0;height:200px;width:1300px; margin: 0 auto" >
+    <form action="/index/" method="post"> {% csrf_token %}
+       <br>
+       First Name: <input type="text" style="width:200px; height:60px;margin: 0 auto"  name="FirstName"/>
+       Middle Name: <input type="text" style="width:200px; height:60px;margin: 0 auto" name="MiddleName"/>
+       Last Name: <input type="text" style="width:200px; height:60px;margin: 0 auto"  name="LastName"/>
+       <!--Department: <input type="text" name="dept"/><br>-->
+        <input type="submit" style="width:200px; height:70px;"  value="submit">
+    </form>
+       <div style="background-color:blue;height:60px;width:300px;">
+        <p id="Name"> Name: </p>
+        <p id="Address"> Address: </p>
+        </div>
+    </div>
+
+    <script 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEUrMudBp6oaC0ZbJgeXmNrKayVwr9WIM&callback=initMap">
+    </script>
+    <div id="map"></div>
+    <script >
+      // In the following example, markers appear when the user clicks on the map.
+      // Each marker is labeled with a single alphabetical character.
+      google.maps.visualRefresh=true;
+      var map;
+      var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var labelIndex = 0;
+      var geocoder;
+      // var s='<%=People%>'
+      var People=[{{People|safe}}];
+    //  alert(People[0].ZipCode);
+      var address;
+      if (isEmptyObject(People))
+        { 
+          alert("No recorder Find, Check Name again");
+          address='85719'
+          document.getElementById("Name").innerHTML ='Developer: Bill yuan';
+        }
+      else
+        {
+          address =(People[0].ZipCode).toString();
+          document.getElementById("Name").innerHTML =People[0].FirstName+"  "+People[0].MiddleName+"  "+People[0].LastName;
+        }
+
+      function initialize() {
+    /*
+       map = new google.maps.Map(document.getElementById('map'), {zoom: 8});
+       geocoder = new google.maps.Geocoder;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            map.setCenter(results[0].geometry.location);
+            new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+            });
+          } else {
+            window.alert('Geocode was not successful for the following reason: ' +
+                status);
+          }
+        });
+      */
+     
+          map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8
+          });
+
+         var location=getLatLngByZipcode(address);
+        // Add a marker at the center of the map.
+        //   addMarker(bangalore, map);
+       //   addMarker(location, map);
+
+      }
+
+      // judge  empty json data 
+      function isEmptyObject(e) {  
+        var t;  
+         for (t in e)  
+          return false;  
+       return true;
+     }  
+      // Adds a marker to the map.
+      function addMarker(location, map) {
+        // Add the marker at the clicked location, and add the next-available label
+        // from the array of alphabetical characters.
+        var marker = new google.maps.Marker({
+          position: location,
+          label: labels[labelIndex++ % labels.length],
+          map: map
+        });
+      }
+
+
+      function getLatLngByZipcode(zipcode) {
+        geocoder = new google.maps.Geocoder();
+        var address = zipcode;
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                map.setCenter(results[0].geometry.location);
+                new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+               });
+            //   alert("Address  "+results[0].formatted_address);
+               document.getElementById("Address").innerHTML =results[0].formatted_address;
+            } else {
+                alert("Request failed.")
+            }
+        });
+        return [latitude, longitude];
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);   
+      
+    </script>
+
+  </body>
+</html>
+
