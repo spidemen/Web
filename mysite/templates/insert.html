@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Info System</title>
+</head>
+<body>
+<div id="container" style="width:500px; margin: 0 auto" align='center'left='50%' top='50%'>
+
+<div id="header" style="background-color:#FFA500;">
+<h1 style="margin-bottom:0;">Student Info System</h1></div>
+
+<div id="menu" style="background-color:#FFD700;height:200px;width:100px;float:left;">
+<b>No Account yet?</b><br>
+<p><a href='http://54.183.168.96:8000/signup/'>Sign Up</a></p><br>
+</div>
+
+<div id="content" style="background-color:#EEEEEE;height:200px;width:400px;float:left;text-align:center;">
+	<p>Sign In Here</p>
+    <form action="/insert/" method="post"> {% csrf_token %}
+       Username: <input type="text" name="username"/><br>
+       Password: <input type="text" name="password"/><br>
+       <!--Department: <input type="text" name="dept"/><br>-->
+        <input type="submit" value="Sign In">
+    </form>
+    <br>
+</div>
+    
+<div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+<p><a href='http://54.183.168.96:8000/admin1/'>Are you administrator?</a></p><br>
+    {% for line in People %}
+    <p>Your Info</p>
+    <table border='1' align='center'>
+    <tr>
+        <td>Your username: {{line.username}}</td>
+        <!--<td>{{line.password}} </td>-->
+        <td>Your department: {{line.dept}}</td>
+        <br>
+    </tr>
+   {% endfor %}
+    </table>
+   <br>
+   {{error_msg}}
+    <br>
+</div>
+</div>
+     <form action="/insert/" method="post"> {% csrf_token %}
+        <input type="text" name="content"  size="55"  style="margin-left:600px;margin-top:5px;" />
+        <input type="submit" value="Add your blog">
+    </form>
+     <tr >
+        <th style="margin-left:600px;">your blog post here</th>
+        <td>{{tw}}</td>
+        <br>
+    </tr>
+</body>
+</html>

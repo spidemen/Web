@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Table Info</h1>
+    <form action="/admin1/" method="post"> {% csrf_token %}
+        <input type="text" name="username"/>
+        <input type="text" name="password"/>
+        <input type="text" name="dept"/>
+        <input type="submit" value="loggin">
+    </form>
+     <tr>
+        <th>usename   </th>
+        <th>password  </th>
+        <th>deptment </th> 
+    </tr>
+    <br>
+    <div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in people_list %}
+                <tr>
+                    <td>{{line.username}}</td>
+                    <td>{{line.password}}</td>
+                    <td>{{line.dept}}</td>
+                </tr>
+             {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

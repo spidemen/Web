@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up</title>
+</head>
+<body>
+<table width="500" border="0" align='center' >
+<tr>
+<td colspan="2" style="background-color:#FFA500;">
+<h1>Sign up</h1>
+</td>
+</tr>        
+
+<tr>
+<td style="background-color:#FFD700;width:100px;vertical-align:top;">
+        <p>Already have an account? <a href='http://54.183.168.96:8000/insert/'>Sign In</a></p>
+</td>
+
+<td style="background-color:#eeeeee;height:200px;width:400px;vertical-align:top;">    
+<form action="/signup/" method="post"> {% csrf_token %}
+       Username: <input type="text" name="username"/><br>
+       Password: <input type="text" name="password"/><br>
+       Department: <input type="text" name="dept"/><br>
+        <input type="submit" value="Sign up">
+    </form>
+</td>
+</tr>
+
+<tr>
+<td colspan="2" style="background-color:#FFA500;text-align:center;">
+    <br>
+<p>Once signed up successfully, you will go to sign in page!</p>
+    {% for line in People %}
+    <tr>
+        <td>{{line.username}}</td>
+        <td>{{line.password}} </td>
+        <td>{{line.dept}}</td>
+        <br>
+    </tr>
+   {% endfor %}
+   <br>
+   {{error_msg}}
+</td>
+</tr>
+</table>
+</body>
+</html>
+
